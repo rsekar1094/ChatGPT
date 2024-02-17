@@ -14,6 +14,10 @@ class MessageResponseAnimator {
     private let fullMessage: String
     private var messageCurrentIndex: Int = 0
     
+    var isActive: Bool {
+       return timer?.isValid ?? false
+    }
+    
     init(fullMessage: String) {
         self.fullMessage = fullMessage
     }

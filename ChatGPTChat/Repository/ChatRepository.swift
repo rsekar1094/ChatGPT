@@ -53,7 +53,7 @@ struct RemoteDataChatRepository: ChatRepository {
     private var networkManager: NetworkManaging
     
     @Inject
-    private var config: ConfigImpl
+    private var config: Config
     
     func send(message: String) async throws -> String {
         let requestBody = [

@@ -17,6 +17,9 @@ struct ChatView: View {
     @Environment(\.theme) 
     var theme
     
+    @FocusState
+    var isSearchBarFocused: Bool
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -32,6 +35,11 @@ struct ChatView: View {
                     .padding(.bottom, 16)
                     .padding(.top, 8)
                 
+            }
+            .onChange(of: viewModel.isSearchActive) { _, isActive in
+                guard isActive else { return }
+                
+                self.isSearchBarFocused = true
             }
             .toolbarTitleDisplayMode(.inline)
             .toolbar {
@@ -64,17 +72,14 @@ private extension ChatView {
             LazyVStack {
                 ForEach(viewModel.messages) { message in
                     
-                    ChatMessageView(message: message, highLightString: viewModel.searchBarViewModel.text)
-                        .observeSize { _ in
-                            let oldId = viewModel.scrollToMessageId
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation {
-                                    viewModel.scrollToMessageId = oldId
-                                }
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
+                    ChatMessageView(
+                        message: message,
+                        highLightString: viewModel.searchBarViewModel.text
+                    ).observeSize { _ in
+                        self.viewModel.rescrollToLastMessageIdIfAnimatorOn()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
                     
                 }
             }
@@ -120,7 +125,10 @@ private extension ChatView {
     
     var searchBar: some View {
         HStack(spacing: 0) {
-            ChatSearchBar(viewModel: viewModel.searchBarViewModel)
+            ChatSearchBar(
+                viewModel: viewModel.searchBarViewModel, 
+                focusedState: $isSearchBarFocused
+            )
                 
             cancelButton
         }

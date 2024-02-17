@@ -77,7 +77,7 @@ private extension ChatMessageView {
     }
     
     func highlight(_ string: String, with boldPart: String) -> AttributedString {
-        var attributedString = NSMutableAttributedString(string: string)
+        let attributedString = NSMutableAttributedString(string: string)
     
         string.lowercased().ranges(of: boldPart.lowercased()).forEach { range in
             let nsRange = NSRange(range, in: string)

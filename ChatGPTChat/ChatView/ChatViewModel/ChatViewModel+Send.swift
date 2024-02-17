@@ -43,6 +43,14 @@ extension ChatViewModel {
             }
         }
     }
+    
+    func rescrollToLastMessageIdIfAnimatorOn() {
+        guard self.currentMessageAnimator?.isActive ?? false else {
+            return
+        }
+        
+        rescrollToLastMessageId()
+    }
 }
 
 // MARK: - ChatViewModel + Agent
@@ -55,14 +63,13 @@ private extension ChatViewModel {
                 
                 let newMessage = MessageData(id: messageId,content: .data(message))
                 self.messages[messages.count - 1] = .agent(newMessage)
-                
-                self.rescrollToCurrentMessageId()
+            
             },
             didComplete: { [weak self] in
                 guard let self else { return }
                 self.messageInputViewModel.isSendEnabled = true
     
-                self.rescrollToCurrentMessageId()
+                self.rescrollToLastMessageId()
             }
         )
        
@@ -71,12 +78,13 @@ private extension ChatViewModel {
         }
     }
     
-    func rescrollToCurrentMessageId() {
-        let messageId = self.scrollToMessageId
-        
+    func rescrollToLastMessageId() {
         self.scrollToMessageId = nil
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.scrollToMessageId = messageId
+            withAnimation {
+                self.scrollToMessageId = self.messages.last?.id
+            }
         }
     }
 }

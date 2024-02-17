@@ -17,8 +17,7 @@ struct ChatSearchBar: View {
     @ObservedObject
     var viewModel: ChatSearchBarViewModel
     
-    @FocusState
-    private var isFocused: Bool
+    let focusedState: FocusState<Bool>.Binding
     
     var body: some View {
         HStack(spacing: 0) {
@@ -27,27 +26,13 @@ struct ChatSearchBar: View {
                 .padding(.trailing, 8)
             
             TextField("Search", text: $viewModel.text)
-                .focused($isFocused)
-                .onReceive(viewModel.$isFocused) { value in
-                    print("$isFocused req \(value) \(isFocused)")
-                    guard value != isFocused else { return }
-                    isFocused = value
-                    print("$isFocused isFocused changed \(value) \(isFocused)")
-                }
-                .onChange(of: isFocused) { _,isFocused in
-                    guard isFocused != viewModel.isFocused else { return }
-                    viewModel.isFocused = isFocused
-                }
+                .focused(focusedState)
                
-            
             deleteView
                 .padding(.horizontal, 8)
         }
         .background(Color.gray.opacity(0.1))
         .cornerRadius(12)
-        .onAppear {
-            isFocused = true
-        }
     }
 }
 
