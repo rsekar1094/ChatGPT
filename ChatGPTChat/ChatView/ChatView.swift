@@ -75,7 +75,8 @@ private extension ChatView {
                     ChatMessageView(
                         message: message,
                         highLightString: viewModel.searchBarViewModel.text
-                    ).observeSize { _ in
+                    )
+                    .observeSize { _ in
                         self.viewModel.rescrollToLastMessageIdIfAnimatorOn()
                     }
                     .padding(.horizontal, 16)

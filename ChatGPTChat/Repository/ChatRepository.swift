@@ -58,7 +58,8 @@ struct RemoteDataChatRepository: ChatRepository {
     func send(message: String) async throws -> String {
         let requestBody = [
             "model": config.gptModel,
-            "messages": [["role" : "user", "content" : message]]
+            "messages": [["role" : "user", "content" : message],
+                         ["role" : "system", "content" : "You are movies and web series helper who will give information about or give a good suggestions on those"]]
         ] as [String : Any]
         
         let model: ChatCompletionResponse = try await networkManager.fetch(

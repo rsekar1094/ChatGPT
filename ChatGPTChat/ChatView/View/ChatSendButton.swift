@@ -52,8 +52,8 @@ private extension ChatSendButton {
             .padding(.vertical, 10)
             .background(
                 Circle()
-                .fill()
-                .foregroundStyle(isEnabled ? theme.color.primary : Color.gray)
+                    .fill()
+                    .foregroundStyle(isEnabled ? theme.color.primary : Color.gray)
             )
     }
 }

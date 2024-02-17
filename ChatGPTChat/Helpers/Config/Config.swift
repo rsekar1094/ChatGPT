@@ -19,6 +19,6 @@ protocol Config {
 // MARK: - ConfigImpl
 class ConfigImpl: Config {
     var apiBasePath: String { return "https://api.openai.com/v1/" }
-    var appToken: String { return "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" }
+    var appToken: String { return "" } // TODO: Replace here with your token
     var gptModel: String { return "gpt-3.5-turbo" }
 }
